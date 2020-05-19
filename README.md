@@ -28,7 +28,8 @@ This DApp is currently running at https://www.ethfundraiser.xyz. However, to ins
 1) Open a terminal windows/command prompt, navigate to the directory required and then `git clone` the ethfundraiser repository
 2) Change to the newly created directory and run `npm install` to load the required npm modules
 3) Edit the `./public/js/ethfundraiser_defaults_ToDo.js` file and update the DApp default values, such as your donation address, Etherscan API Key and WebHosting URL. Save this file in the same directory using `ethfundraiser_defaults.js` as the filename
-4) To start-up the webserver run `npm run server`. The webserver should then be running on http://localhost:3000/. Adjust the port settings in `server.js` as required
+4) If you wish to use HTTPS the edit `server.js` and modify the certPath = '' directory with the path to your HTTPS certificate & key files
+5) To start-up the webserver run `npm run server`. The webserver should then be running on http://localhost:3000/. Adjust the port settings in `server.js` as required
 
 ## Project Structure
 ```powershell
