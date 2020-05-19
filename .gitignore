@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# local working files
+_localFiles
+
+# specific files for this project
+ethfundraiser_defaults.js

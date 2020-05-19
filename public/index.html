@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Fund Raiser DApp using Ethereum Smart Contracts">
+  <meta name="keywords" content="Ether, ETH, DApp, Fund Raiser, Crypto, Smart Contract">
+  <meta name="author" content="Malarena SA - www.malarena.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Ether Fund Raiser</title>
+  <link rel="shortcut icon" type="image/png" sizes="96x96" href="images/favicon-96x96.png">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.37/dist/web3.min.js"></script>
+  <script src="js/ethfundraiser_defaults.js"></script>
+  <script src="js/ethNetworks.js"></script>
+  <script src="js/fundraiser_abi.js"></script>
+  <script src="js/fundraiser_bytecode.js"></script>
+  <script src="js/ethfundraiser.js"></script>
+</head>
+
+<body>
+  <!-- Header Section -->
+  <div class="container-fluid bg-light">
+    <div class="row">
+      <!-- Title & Logo -->
+      <div class="col-sm-3 text-left" id="logo">
+        <h3><img src="images/logo.png" /> Ether Fund Raiser</h3>
+        <p class="small">Using Ethereum Smart Contracts to raise funds</p>
+      </div>
+      <!-- Navigation Menu -->
+      <div class="col-sm mt-3" id="navbar">
+        <ul class="nav nav-pills nav-fill" id="tab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="pill" href="#home-content" role="tab" aria-controls="home" aria-selected="true">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="new-tab" data-toggle="pill" href="#new-content" role="tab" aria-controls="new" aria-selected="false">New Contract</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="existing-tab" data-toggle="pill" href="#existing-content" role="tab" aria-controls="existing" aria-selected="false">Existing Contract</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="spendreqs-tab" data-toggle="pill" href="#spendreqs-content" role="tab" aria-controls="spendreqs" aria-selected="false">Spending Requests</a>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Header Information Section -->
+      <div class="col-sm text-right" id="info">
+        <ul class="list-unstyled">
+          <li>Network: <span class="text-info" id="top-network"></span> / Cur Block: <span class="text-info" id="top-curBlock"></span></li>
+          <li>Your Account: <span class="text-info" id="top-account"></span></li>
+          <li>Smart Contract: <span class="text-info" id="top-contract"></span></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Main Section -->
+  <div class="container tab-content mt-3" id="tabContent">
+    <!-- Home Page -->
+    <div class="tab-pane fade show active" id="home-content" role="tabpanel" aria-labelledby="home-tab">
+      <div class="row">
+        <h5>Welcome to Ether Fund Raiser.</h5>
+        <p>This DApp allows you to raise cryptocurrency (Ether) funds using Smart Contracts deployed on the Ethereum Blockchain. Once the goal of the contract has been reached, the contract owner can then issue a Spending Request to release the funds which then requires over 50% of the contributors to approve before the Ether is released. Any contracts failing to reach their goal by the deadline can be refunded. Also, any contracts that reached their goal but have no approved and paid spending requests within an initial payment period after the deadline can also be refunded.</p>
+        <p>To use this DApp you will need an Ethereum Wallet installed in your browser, such as <a href="https://metamask.io/" target="_blank">MetaMask</a>, and give this DApp permission to connect to your wallet. Any transactions you initiate that require processing will display the MetaMask approval window prior to forwarding to the blockchain. You can use MetaMask to connect to the various Test Networks in order to test this DApp with test Ether before switching to the Main Ethereum Network (see examples below). An [Events] section is included at the bottom of the screen to communicate all processing between this DApp and the blockchain. By clicking on the transaction or contract address hyperlinks you can use <a href="https://etherscan.io/" target="etherscan">Etherscan</a> to see the actual status and transaction history as recorded on the blockchain.</p>
+      </div>
+      <div class="row">
+        <div class="col-sm-7 shadow">
+          <h6 class="mt-3">How it works - For Fund-Raisers.</h6>
+          <p>Start by choosing the [New Contract] menu option to deploy a new fund-raising smart contract, selecting the duration of the contract (in blocks of roughly 15 seconds), the initial payment period (also in blocks) after the deadline to allow payments to be approved and released, the financial goal and the minimum contribution level (both in Wei - the smallest denomination of Ether). Once deployed, you can email a link of the deployed contract to your contributors. There is a [Wei Converter] to assist in converting values between Wei, Ether and USD, and a [Block Converter] to assist with calculating (and resetting) block times, which defaults to the current network average block time.</p>
+          <p>From the [Existing Contract] menu option you and your contributors can see the status of the deployed fund-raising smart contract and can make contributions. As the owner you can check the contribution made from a contributor's account, and also change the ownership of the contract to a different account.</p>
+          <p>Once the smart contract has reached its goal, you can use the [Spending Requests] menu option to create one or more Spending Requests (up to a maximum of <span id="maxRequests"></span>) outlining how the funds will be spent, and then email a link of the spending request to your contributors. The contributors can then vote on the request and you can check if a specific contributor's account has voted. Only when over 50% of contributors have voted can the amount requested be released via the [Pay Request] button.</p>
+        </div>
+        <div class="col-sm-5 shadow">
+          <h6 class="mt-3">How it works - For Contributors.</h6>
+          <p>You will have been sent the Ethereum address of the relevant fund-raising Smart Contract you wish to support. From the [Existing Contract] menu option, enter this address and click on [Get Details] to see the status of the deployed fund-raising smart contract. You can then use the [Contribute] button to make contributions at or above the minimum contribution amount. If the smart contract fails to raise the Goal amount before the end of the deadline then you can use the [Refund] button to receive a refund of any funds you have contributed. You can also get a refund if the contract reached its goal but has not had any spending requests approved and paid within the initial payment period after the deadline.</p>
+          <p>Once the smart contract has reached its goal, the owner will create one or more Spending Requests. These can be viewed using the [Spending Requests] option where you can enter the request ID and click on [Get Details] to display the request detailing how the money will be spent. As a contributor you can then vote on each request and only when over 50% of contributors have voted for a request can the relevant payment be released.</p>
+        </div>
+      </div>
+      <div class="row">
+        <h6 class="mt-3">Important Notes.</h6>
+        <p>The blockchain is constantly updating (for example there is a new block mined roughly every 15 seconds) and this DApp only provides a snapshot of data that is updated with each interaction. If left idle for too long, the data shown will become out-of-date. To get the latest information click again on [Get Details].</p>
+        <p>Each fund-raising Smart Contract is "owned" by the account used during the deployment. Certain owner-only actions (such as creating and paying Spending Requests) can ONLY be actioned by the "owner". Therefore, if the wallet or keys of the owner account are lost there is no way to recover these funds. There are no secret backdoors to these contracts!</p>
+        <p>All transactions connected with this site are performed directly on the selected blockchain. The miners will charge minimal standard fees for each transaction processed, including deploying the contract, making a contribution, voting for a spending request, releasing payment of a request, etc. NO additional fees are charged, and NO fees are deducted from the amounts raised. However, any transaction fees paid to the miners are non-refundable. To make a contribution towards the running of this site please send any donations to: <span id="donationAddress"></span>.</p>
+        <p class="mb-0">Examples of this Smart Contract being deployed and funded and then payment requests created, voted for and released can be found at:</p>
+        <ul>
+          <li>Mainnet: <a href="https://etherscan.io/address/0x4e57b2cddbda32a2fe721e3ff53aed56b75c2e4d" target="etherscan">0x4E57b2CDdbdA32a2fe721e3ff53aed56B75C2e4d</a></li>
+          <li>Goerli Test Network: <a href="https://goerli.etherscan.io/address/0xd3a09b674d8fd6c544e9b44f8e16837eccb11d02" target="etherscan">0xD3A09B674D8Fd6C544e9b44f8e16837ECCB11D02</a></li>
+          <li>Rinkeby Test Network: <a href="https://rinkeby.etherscan.io/address/0x24515d10c6b42ebec05c200bd750352df2a69150" target="etherscan">0x24515D10C6B42ebEC05C200Bd750352DF2a69150</a></li>
+        </ul>
+        <p>There is no database on this site holding details of your contracts, transactions and keys. The only data stored on the webserver is a log of the Ethereum account and contract addresses used when each transaction processed, and this is only collected for analytical purposes.</p>
+        <p>This DApp is © 2019-<script>document.write(new Date().getFullYear());</script> Malarena SA. For further details, including our Privacy Policy and Legal Notice, please see our main <a href="https://www.malarena.com" target="_blank">website</a>. All of the code for this DApp, including the Smart Contract template used, is available through <a href="https://github.com/MalarenaSA" class="text-body text-decoration-none" target="_blank"><img src="images/GitHub-Mark-32px.png" style="width:30px" /> GitHub</a></p>
+        <p>This DApp is powered by<a href="https://ethereum.org/" class="text-body text-decoration-none" target="_blank"><img src="images/ETH-logo.png" style="width:35px" />Ethereum</a>, with data links provided by <a href="https://etherscan.io/" target="etherscan"><img src="images/etherscan-logo.png" style="width:125px" /></a></p>
+      </div>
+    </div>
+
+    <!-- New Contract Page -->
+    <div class="tab-pane fade" id="new-content" role="tabpanel" aria-labelledby="new-tab">
+      <div class="row">
+        <div class="col-sm-12 shadow">
+          <p class="mt-3">Enter the contract and initial-payment durations (in blocks), and the goal and minimum contribution level (both in wei) and click on [Deploy].</p>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Duration:</span>
+            </div>
+            <input type="number" class="form-control" id="inputDuration" min="1" placeholder="Contract duration in Blocks (Use Block Converter if requred)" oninput="removeDecimals(this)" />
+            <div class="input-group-append">
+              <span class="input-group-text">Blocks</span>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Initial Payment Duration:</span>
+            </div>
+            <input type="number" class="form-control" id="inputIPDuration" min="0" placeholder="Additional period in Blocks for initial payment to be released (e.g. 30 days - use block converter)" oninput="removeDecimals(this)" />
+            <div class="input-group-append">
+              <span class="input-group-text">Blocks</span>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Goal:</span>
+            </div>
+            <input type="number" class="form-control" id="inputGoal" min="0" placeholder="Amount in Wei (Use Wei Converter if requred)" oninput="removeDecimals(this)" />
+            <div class="input-group-append">
+              <span class="input-group-text">Wei</span>
+            </div>    
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Minimum Contribution:</span>
+            </div>
+            <input type="number" class="form-control" id="inputMinContribution" min="0" placeholder="Amount in Wei  (Use Wei Converter if requred)" oninput="removeDecimals(this)" />
+            <div class="input-group-append">
+              <span class="input-group-text">Wei</span>
+            </div> 
+          </div>
+          <button type="button" onclick=deployContract() class="btn btn-outline-secondary mb-3">Deploy</button>
+          <button type="button" onclick="blockConvertInit()" class="btn btn-outline-info mb-3" data-toggle="modal" data-target="#blockConverter">Block Converter</button>
+          <button type="button" onclick="weiConvertInit()" class="btn btn-outline-info mb-3" data-toggle="modal" data-target="#weiConverter">Wei Converter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Existing Contract Page -->
+    <div class="tab-pane fade" id="existing-content" role="tabpanel" aria-labelledby="existing-tab">
+      <!-- Get Contract Details -->
+      <div class="row">
+        <p>Enter the Smart Contract Address for your Fund Raising campaign and click on [Get Details]. <span class="text-info" id="contractTimestamp"></span></p>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Smart Contract Address:</span>
+          </div>
+          <input type="text" class="form-control" id="contractAccount" placeholder="0x..." autocomplete="off" />
+          <div class="input-group-append">
+            <button type="button" onclick=connectContract() class="btn btn-outline-secondary">Get Details</button>
+            <button type="button" onclick=emailContractLink() class="btn btn-outline-secondary">Email Link</button>
+            <button type="button" onclick="blockConvertInit()" class="btn btn-outline-info" data-toggle="modal" data-target="#blockConverter">Block Converter</button>
+            <button type="button" onclick="weiConvertInit()" class="btn btn-outline-info" data-toggle="modal" data-target="#weiConverter">Wei Converter</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Contract Information Table -->
+      <div class="row">
+        <table class="table table-bordered table-striped table-sm">
+          <tr>
+            <td>Owner:</td>
+            <td id="contractOwnedStatusBg"><span id="contractOwnedStatus"></span></td>
+            <td colspan="3"><span id="contractOwner"></span></td>
+          </tr>
+          <tr>
+            <td>Deadline:</td>
+            <td id="contractDeadlineStatusBg"><span id="contractDeadlineStatus"></span></td>
+            <td>Block <span id="contractDeadlineBlock"></span></td>
+            <td><span id="contractDeadlineLeft"></span></td>
+            <td><span id="contractDeadlineDHM"></span></td>
+          </tr>
+          <tr>
+            <td>Initial Payment Deadline:</td>
+            <td id="contractIPDeadlineStatusBg"><span id="contractIPDeadlineStatus"></span></td>
+            <td>Block <span id="contractIPDeadlineBlock"></span></td>
+            <td><span id="contractIPDeadlineLeft"></span></td>
+            <td><span id="contractIPDeadlineDHM"></span></td>
+          </tr>
+          <tr>
+            <td>Goal:</td>
+            <td id="contractGoalStatusBg"><span id="contractGoalStatus"></span></td>
+            <td><span id="contractGoalWei"></span> wei</td>
+            <td>ETH: <span id="contractGoalETH"></span></td>
+            <td>USD: <span id="contractGoalUSD"></span></td>
+          </tr>
+          <tr>
+            <td colspan="2">Amount Raised:</td>
+            <td><span id="contractAmtRaisedWei"></span> wei</td>
+            <td>ETH: <span id="contractAmtRaisedETH"></span></td>
+            <td>USD: <span id="contractAmtRaisedUSD"></span></td>
+          </tr>
+          <tr>
+            <td colspan="2">Amount Left To Raise:</td>
+            <td><span id="contractAmtToRaiseWei"></span> wei</td>
+            <td>ETH: <span id="contractAmtToRaiseETH"></span></td>
+            <td>USD: <span id="contractAmtToRaiseUSD"></span></td>
+          </tr>
+          <tr>
+            <td colspan="2">Minimum Contribution Amount:</td>
+            <td><span id="contractMinContWei"></span> wei</td>
+            <td>ETH: <span id="contractMinContETH"></span></td>
+            <td>USD: <span id="contractMinContUSD"></span></td>
+          </tr>
+          <tr>
+            <td colspan="2">Number of Contributors:</td>
+            <td colspan="3"><span id="contractTotalContributors"></span></td>
+          </tr>
+          <tr>
+            <td>Contract Balance Remaining:</td>
+            <td id="contractBalanceStatusBg"><span id="contractBalanceStatus"></span></td>
+            <td><span id="contractBalanceWei"></span> wei</td>
+            <td>ETH: <span id="contractBalanceETH"></span></td>
+            <td>USD: <span id="contractBalanceUSD"></span></td>
+          </tr>
+          <tr>
+            <td>Number of Spending Requests:</td>
+            <td id="contractSpendReqBg"><span id="contractSpendReqStatus"></span></td>
+            <td><span id="contractSpendingRequests"></span></td>
+            <td><span id="contractRequestCountLeft"></span></td>
+            <td><span id="contractRequestCountMax"></span></td>
+          </tr>
+          <tr>
+            <td colspan="2">Amount Paid Out:</td>
+            <td><span id="contractPaidOutWei"></span> wei</td>
+            <td>ETH: <span id="contractPaidOutETH"></span></td>
+            <td>USD: <span id="contractPaidOutUSD"></span></td>
+          </tr>
+          <tr>
+            <td>Your Account Balance:</td>
+            <td id="accountBalanceStatusBg"><span id="accountBalanceStatus"></span></td>
+            <td><span id="accountBalanceWei"></span> wei</td>
+            <td>ETH: <span id="accountBalanceETH"></span></td>
+            <td>USD: <span id="accountBalanceUSD"></span></td>
+          </tr>
+          <tr>
+            <td colspan="2">Your Contributions:</td>
+            <td><span id="accountContributionsWei"></span> wei</td>
+            <td>ETH: <span id="accountContributionsETH"></span></td>
+            <td>USD: <span id="accountContributionsUSD"></span></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Contract Actions Section-->
+      <div class="row mt-3">
+        <div class="col-sm-7 shadow">
+          <!-- Owner Actions -->
+          <table class="table table-bordered table-sm mt-3">
+            <tr>
+              <th>Fund-Raiser Owner Actions:</th>
+            </tr>
+          </table>
+          <!-- Check Contribution -->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Account:</span>
+            </div>
+            <input type="text" class="form-control" id="contributorAccount" placeholder="Contributor's Account" autocomplete="off" />
+            <div class="input-group-append">
+              <button type="button" onclick=checkContribution() class="btn btn-outline-secondary">Check Contribution</button>
+            </div>
+          </div>
+          <!-- Change Owner -->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Account:</span>
+            </div>
+            <input type="text" class="form-control" id="newOwnerAccount" placeholder="New Owner's Account" autocomplete="off" />
+            <div class="input-group-append">
+              <button type="button" onclick=changeOwner() class="btn btn-outline-secondary">Change Owner</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-5 shadow">
+          <!-- Contributor Actions -->
+          <table class="table table-bordered table-sm mt-3">
+            <tr>
+              <th>Contributor Actions:</th>
+            </tr>
+          </table>
+          <!-- Make Contribution -->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Amount:</span>
+            </div>
+            <input type="number" class="form-control" id="contributionAmt" min="1" placeholder="Amount in Wei" oninput="removeDecimals(this)" />
+            <div class="input-group-append">
+              <button type="button" onclick=sendContribution() class="btn btn-outline-secondary">Contribute</button>
+            </div>
+          </div>
+          <!-- Get Refund -->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Amount:</span>
+            </div>
+            <input type="number" class="form-control bg-light" id="refundAmt" readonly />
+            <div class="input-group-append">
+              <button type="button" onclick=processRefund() class="btn btn-outline-secondary">Refund</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spending Requests Page -->
+    <div class="tab-pane fade" id="spendreqs-content" role="tabpanel" aria-labelledby="spendreqs-tab">
+      <!-- Get Spending Request Details -->
+      <div class="row">
+        <p>Enter the Spending Request ID and click on [Get Details]. <span class="text-info" id="requestTimestamp"></span></p>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Spending Request ID:</span>
+          </div>
+          <input type="number" class="form-control" id="requestId" min="0" oninput="removeDecimals(this)" />
+          <div class="input-group-append">
+            <button type="button" onclick=getSpendRequest() class="btn btn-outline-secondary">Get Details</button>
+            <button type="button" onclick=emailSpendReqLink() class="btn btn-outline-secondary">Email Link</button>
+            <button type="button" onclick="weiConvertInit()" class="btn btn-outline-info" data-toggle="modal" data-target="#weiConverter">Wei Converter</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Spending Request Information Table -->
+      <div class="row">
+        <table class="table table-bordered table-striped table-sm">
+          <tr>
+            <td>Description:</td>
+            <td id="requestStatusBg"><span id="requestStatus"></span></td>
+            <td colspan="3"><span id="requestDescription"></span></td>
+          </tr>
+          <tr>
+            <td colspan="2">Value:</td>
+            <td><span id="requestValueWei"></span> wei</td>
+            <td>ETH: <span id="requestValueETH"></span></td>
+            <td>USD: <span id="requestValueUSD"></span></td>
+          </tr>
+          <tr>
+            <td colspan="2">Recipient Account:</td>
+            <td colspan="3"><span id="requestRecipient"></span></td>
+          </tr>
+          <tr>
+            <td>Number of Voters:</td>
+            <td id="requestVoterStatusBg"><span id="requestVoterStatus"></span></td>
+            <td colspan="3"><span id="requestNoOfVoters"></span></td>
+          </tr>
+          <tr>
+            <td colspan="2">You have Voted for this request:</td>
+            <td colspan="3"><span id="requestAccountVote"></span></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Spending Request Actions Section-->
+      <div class="row mt-3">
+        <div class="col-sm-8 shadow">
+          <!-- Owner Actions -->
+          <table class="table table-bordered table-sm mt-3">
+            <tr>
+              <th>Fund-Raiser Owner Actions:</th>
+            </tr>
+          </table>
+          <!-- Pay Request -->
+          <div class="input-group mb-3">
+            <button type="button" onclick=paySpendRequest() class="btn btn-outline-secondary">Pay above Request</button>
+          </div>
+          <!-- Check Voted -->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Account:</span>
+            </div>
+            <input type="text" class="form-control" id="voterAccount" placeholder="Contributor's Account" autocomplete="off" />
+            <div class="input-group-append">
+              <button type="button" onclick=checkVoted() class="btn btn-outline-secondary">Check if Voted</button>
+            </div>
+          </div>
+          <hr>
+          <!-- Create New Request -->
+          <div class="input-group mb-3">
+            <p>Create a new Spending Request by entering the details below and click on [Create Request]:</p>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Description:</span>
+              </div>
+              <input type="text" class="form-control" id="inputReqDesc" placeholder="Request Description" autocomplete="off" />
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Request Value:</span>
+              </div>
+              <input type="number" class="form-control" id="inputReqValue" min="1" placeholder="Amount in Wei" oninput="removeDecimals(this)" />
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Recipient Account:</span>
+              </div>
+              <input type="text" class="form-control" id="inputReqRecipient" placeholder="0x..." autocomplete="off" />
+            </div>
+            <button type="button" onclick=createSpendRequest() class="btn btn-outline-secondary">Create Request</button>
+          </div>
+        </div>    
+        <div class="col-sm-4 shadow">
+          <!-- Contributor Actions -->
+          <table class="table table-bordered table-sm mt-3">
+            <tr>
+              <th>Contributor Actions:</th>
+            </tr>
+          </table>
+          <!-- Vote for Request -->
+          <div class="input-group mb-3">
+            <button type="button" onclick=voteSpendRequest() class="btn btn-outline-secondary">Vote for Request</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Events Section -->
+  <div class="container mt-3 border">
+    <b>Events: </b>(<span class="text-danger">Red=Error</span> / <span class="text-warning">Yellow=In Progress or Warning</span> / <span class="text-success">Green=Completed</span>)
+    <div class="overflow-auto" style="max-height: 150px" id="events"></div>
+  </div>
+
+  <!-- Block Converter Modal -->
+  <div class="modal fade" id="blockConverter" tabindex="-1" role="dialog" aria-labelledby="BlockConverter" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="blockConverterLabel">Block Converter</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Block Time (in seconds):</span>
+            </div>
+            <input type="number" class="form-control" id="blockTime" step = "0.01" min="0.01" placeholder="Current Block Time" oninput="blockConvertNow()" />
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Blocks:</span>
+            </div>
+            <input type="number" class="form-control" id="blocksNumber" min="1" placeholder="Number of Blocks" oninput="blockConvertNow()" />
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Duration:</span>
+            </div>
+            <input type="text" class="form-control bg-light" id="blocksDHM" readonly />
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Example:</span>
+            </div>
+            <input type="text" class="form-control bg-light" id="blocksExampleDHM" readonly />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" onclick="blockConvertReset(0)" title="Reset DApp to use above Block Time">Save Block Time</button>
+          <button type="button" class="btn btn-light" onclick="blockConvertReset(1)" title="Reset DApp to use Network Average Block Time">Reset to Average Time</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wei Converter Modal -->
+  <div class="modal fade" id="weiConverter" tabindex="-1" role="dialog" aria-labelledby="WeiConverter" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="weiConverterLabel">Wei Converter</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Wei:</span>
+            </div>
+            <input type="number" class="form-control" id="convertWei" min="0" placeholder="Amount in Wei" oninput="weiConvertNow(this)" />
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Ether:</span>
+            </div>
+            <input type="number" class="form-control" id="convertEth" min="0" placeholder="Amount in Ether" oninput="weiConvertNow(this)" />
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">USD:</span>
+            </div>
+            <input type="number" class="form-control" id="convertUSD" min="0" max="100000000000000000000" step="0.01" placeholder="Amount in USD" oninput="weiConvertNow(this)" />
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Current Rate 1ETH > USD:</span>
+            </div>
+            <input type="number" class="form-control bg-light" id="convertRate" readonly />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" onclick="weiConvertInit()">Reset</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "ethfundraiser",
+  "version": "1.0.0",
+  "description": "An Ethereum fund-raising DApp using Smart Contracts to raise funds",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MalarenaSA/ethfundraiser.git"
+  },
+  "keywords": [
+    "Ethereum",
+    "Ether",
+    "Fund",
+    "Raising",
+    "Smart",
+    "Contract"
+  ],
+  "author": "Malarena SA",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MalarenaSA/ethfundraiser/issues"
+  },
+  "homepage": "https://github.com/MalarenaSA/ethfundraiser#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
