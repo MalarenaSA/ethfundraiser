@@ -1,6 +1,6 @@
 {
   "name": "ethfundraiser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An Ethereum fund-raising DApp using Smart Contracts to raise funds",
   "main": "server.js",
   "scripts": {

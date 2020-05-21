@@ -1063,7 +1063,7 @@ async function checkVoted() {
  */
 async function voteSpendRequest() {
   if (chosenRequestId == null || chosenRequestId == "") {
-    message = `Error: No Spending Request selected.`;
+    message = `Error: No Spending Request Selected.`;
     showMessage("alert alert-danger", message, 2, 0);
   } else if (+chosenRequestId >= +totRequests) {
     message = `Error: Spending Request does not exist.`;
@@ -1169,13 +1169,13 @@ function weiConvertNow(element) {
     let toConvert = document.getElementById(element.id).value;
     let ethValue = web3.utils.fromWei(toConvert, "ether");
     document.getElementById("convertEth").value = ethValue;
-    document.getElementById("convertUSD").value = (+ethValue * +rateUSD);
+    document.getElementById("convertUSD").value = (+ethValue * +rateUSD).toFixed(2);
   } else if (element.id == "convertEth") {
     checkDecimals(element);
     let toConvert = document.getElementById(element.id).value;
     if (toConvert == "") toConvert = "0";
     document.getElementById("convertWei").value = web3.utils.toWei(toConvert, "ether");
-    document.getElementById("convertUSD").value = (+toConvert * +rateUSD);
+    document.getElementById("convertUSD").value = (+toConvert * +rateUSD).toFixed(2);
   } else if (element.id == "convertUSD") {
     let toConvert = document.getElementById(element.id).value;
     if (+toConvert > 1000000000000000000000) {  // Max it can handle before errors
