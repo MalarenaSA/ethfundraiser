@@ -44,3 +44,8 @@ ethfundraiser
 - Review MetaMask breaking changes (due Q2/2020) and update app as required
 - See if the DApp can be used with other wallets such as MyCrypto Desktop and MyEtherWallet/MyCrypto web wallets
 - Potential to improve method for iterating over a struct to remove votes during a refund rather than putting a hard-coded max limit on Spending Requests
+
+## Release Notes
+- v1.0.2 - 29/05/2020 - Added link to Ether Fund Raiser page on StateOfTheDApps website
+- v1.0.1 - 21/05/2020 - Update to npm start script; Update to weiConverter to show 2 decimals for USD; Update to GitHub link; Minor Spelling updates
+- v1.0.0 - 19/05/2020 - Initial Release
