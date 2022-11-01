@@ -24,7 +24,9 @@ This DApp has an HTML front-end built using the [Bootstrap](https://getbootstrap
 The web server is hosted using the [express](https://www.npmjs.com/package/express) Node.js module in HTTPS mode.
 
 ## Installation and set-up
-This DApp is currently running at https://www.ethfundraiser.xyz. However, to install a stand-alone version of the DApp you will need to have [npm](https://www.npmjs.com/) and [Node.js](https://nodejs.org/en/) installed, and then:
+This DApp was running on a live server between May 2020 and May 2022.
+
+To install a stand-alone version of the DApp you will need to have [npm](https://www.npmjs.com/) and [Node.js](https://nodejs.org/en/) installed, and then:
 1) Open a terminal windows/command prompt, navigate to the directory required and then `git clone` the ethfundraiser repository
 2) Change to the newly created directory and run `npm install` to load the required npm modules
 3) Edit the `./public/js/ethfundraiser_defaults_ToDo.js` file and update the DApp default values, such as your donation address, Etherscan API Key and WebHosting URL. Save this file in the same directory using `ethfundraiser_defaults.js` as the filename
